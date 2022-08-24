@@ -81,14 +81,11 @@ WSGI_APPLICATION = 'jenkins_app.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dek40lhg2k6934',
-        'USER': 'dsnwmghvwbcidu',
-        'PASSWORD': 'e0617378c2721818e62bd8e79f5ecf4b2285ab2d5167ae7550edc6c53edbff6e',
-        'HOST': 'ec2-34-234-240-121.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
