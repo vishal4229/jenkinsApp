@@ -35,20 +35,20 @@ class create_build_info():
         if username and build_token:
             for index,url in enumerate(self.urls):
                 data[self.job_name[index]] = []
-                response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
+                response = requests.post(url, auth=(username, build_token))
                 response = response.json()
                 build_no = response['number']
                 print(build_no,response['nextBuild'],response['previousBuild'])
                 self.new_method(data, cnt, index, response)
                 if response['nextBuild']:
                     url = url.replace('lastBuild',str(response['nextBuild']['number']))
-                    response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
+                    response = requests.post(url, auth=(username,build_token))
                     response = response.json()
                     if response['building']:
                         self.new_method(data, cnt, index, response)
                 if response['previousBuild']:
                     url = url.replace('lastBuild',str(response['previousBuild']['number']))
-                    response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
+                    response = requests.post(url, auth=(username, build_token))
                     response = response.json()
                     if response['building']:
                         self.new_method(data, cnt, index, response)
