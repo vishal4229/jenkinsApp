@@ -29,29 +29,30 @@ class create_build_info():
       
       self.job_name = ['mfapplication','mfadmin','mfcronicle','mfconsumer']
       
-    def call_jenkins(self):
+    def call_jenkins(self,username,build_token):
         data = {}
         cnt = 0
-        for index,url in enumerate(self.urls):
-            data[self.job_name[index]] = []
-            response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
-            response = response.json()
-            build_no = response['number']
-            print(build_no,response['nextBuild'],response['previousBuild'])
-            self.new_method(data, cnt, index, response)
-            if response['nextBuild']:
-                url = url.replace('lastBuild',str(response['nextBuild']['number']))
+        if username and build_token:
+            for index,url in enumerate(self.urls):
+                data[self.job_name[index]] = []
                 response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
                 response = response.json()
-                if response['building']:
-                    self.new_method(data, cnt, index, response)
-            if response['previousBuild']:
-                url = url.replace('lastBuild',str(response['previousBuild']['number']))
-                response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
-                response = response.json()
-                if response['building']:
-                    self.new_method(data, cnt, index, response)
-            data['build_cnt'] = cnt
+                build_no = response['number']
+                print(build_no,response['nextBuild'],response['previousBuild'])
+                self.new_method(data, cnt, index, response)
+                if response['nextBuild']:
+                    url = url.replace('lastBuild',str(response['nextBuild']['number']))
+                    response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
+                    response = response.json()
+                    if response['building']:
+                        self.new_method(data, cnt, index, response)
+                if response['previousBuild']:
+                    url = url.replace('lastBuild',str(response['previousBuild']['number']))
+                    response = requests.post(url, auth=(os.environ['build_username'], os.environ['build_token']))
+                    response = response.json()
+                    if response['building']:
+                        self.new_method(data, cnt, index, response)
+                data['build_cnt'] = cnt
         return data
 
     def new_method(self, data, cnt, index, response):

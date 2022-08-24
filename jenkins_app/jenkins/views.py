@@ -47,7 +47,9 @@ class VersionInfo(APIView):
 class Build_Current_Info(APIView):
     def get(self,request):
         try:
-            build_data = create_build_info().call_jenkins()
+            username = request.data.get('username')
+            a = Developer.objects.filter(username=username).first()
+            build_data = create_build_info().call_jenkins(a.jenkins_username,a.build_token)
 #             build_data = {
 # 	'mfapplication': [{
 # 		'is_building': True,
